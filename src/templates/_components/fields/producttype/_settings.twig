@@ -1,0 +1,36 @@
+{% import '_includes/forms' as forms %}
+
+{% do view.registerAssetBundle("wmd\\sectionandproducttype\\assetbundles\\producttypefield\\ProductTypeFieldAsset") %}
+
+
+{{ forms.checkboxField({
+    label : 'Select All Sections' | t('section-and-product-type'),
+    instructions : 'This will allow all sections to be used for selection.' | t('section-and-product-type'),
+    id : 'selectAll',
+    class: 'selectAll',
+}) }}
+
+{{ forms.checkboxGroupField({
+    label : 'Allowed Product Types' | t('section-and-product-type'),
+    instructions : 'The product types that may be chosen for this field.' | t('section-and-product-type'),
+    id : 'allowProductTypes',
+    name : 'allowProductTypes',
+    values: field.allowProductTypes,
+    options : productTypes
+}) }}
+
+{{ forms.checkboxField({
+    label : 'Allow Multiple' | t('section-and-product-type'),
+    instructions : 'If checked, the user can select multiple sections, otherwise they can only select one.' | t('section-and-product-type'),
+    id : 'multiple',
+    name : 'multiple',
+    checked: field.multiple
+}) }}
+
+
+{{ forms.checkboxGroupField({
+    label : 'Exclude Product Types' | t('section-and-product-type'),
+    instructions : 'The product types that will be excluded from the selection for this field.' | t('section-and-product-type'),
+    options : productTypes,
+    id : 'excluded',
+}) }}
