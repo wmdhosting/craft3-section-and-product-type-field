@@ -14,7 +14,7 @@ To install the plugin, follow these instructions.
 
 2. Then tell Composer to load the plugin:
 
-        composer require https://github.com/section-and-product-type
+        composer require wmdhosting/section-and-product-type
 
 3. In the Control Panel, go to Settings → Plugins and click the “Install” button for Section And Product Type.
 
