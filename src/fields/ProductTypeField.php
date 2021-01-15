@@ -15,7 +15,12 @@ use craft\commerce\services\ProductTypes;
 class ProductTypeField extends Field implements PreviewableFieldInterface
 {
     /**
-     * @var bool Contains multi-select values for product type.
+     * @var bool Contains  values for select all product types.
+     */
+    public $selectAll = false;
+
+    /**
+     * @var bool Contains multi-select values for product types.
      */
     public $multiple = false;
 
@@ -23,6 +28,11 @@ class ProductTypeField extends Field implements PreviewableFieldInterface
      * @var array Product types that are allowed for selection in the field settings.
      */
     public $allowProductTypes = [];
+
+    /**
+     * @var array Product types that are allowed for selection in the field settings.
+     */
+    public $excludedProductTypes = [];
 
     /**
      * @inheritdoc
@@ -113,6 +123,29 @@ class ProductTypeField extends Field implements PreviewableFieldInterface
     }
 
     /**
+     * Return sections without excluded sections
+     *
+     * @return array
+     */
+    public function getAllowedProductTypes(): array
+    {
+        $productTypes = $this->getProductTypes();
+        $excludedProductTypes = $this->excludedProductTypes;
+
+        if (!empty($excludedProductTypes) && !empty($this->selectAll)) {
+            $excludedProductTypes = array_map(function($value) {
+                return intval($value);
+            }, $excludedProductTypes);
+
+            foreach ($excludedProductTypes as $value) {
+                unset($productTypes[$value]);
+            }
+        }
+
+        return $productTypes;
+    }
+
+    /**
      * @inheritdoc
      */
     public function normalizeValue($value, ElementInterface $element = null)
@@ -185,13 +218,18 @@ class ProductTypeField extends Field implements PreviewableFieldInterface
      */
     public function getInputHtml($value, ElementInterface $element = null): string
     {
-        if (empty($this->allowProductTypes)) return 'You have not selected any product types for selection, select in the field settings.';
+        if (empty($this->allowProductTypes) && empty($this->selectAll)) return 'You have not selected any product types for selection, select in the field settings.';
 
         $productTypes = $this->getProductTypes();
+
+        if (!empty($this->selectAll)) {
+            $productTypes = $this->getAllowedProductTypes();
+        }
+
         $allowProductTypes = array_flip($this->allowProductTypes);
         $allowProductTypes[''] = true;
         if (!$this->multiple && !$this->required) {
-            $productTypes =  array_merge(['' => Craft::t('app', 'None')], $productTypes);;
+            $productTypes =  ['' => Craft::t('app', 'None')] + $productTypes;
         }
         $allowProductTypes = array_intersect_key($productTypes, $allowProductTypes);
 
