@@ -2,33 +2,46 @@
 
 {% do view.registerAssetBundle("wmd\\sectionandproducttype\\assetbundles\\sectionfield\\SectionFieldAsset") %}
 
-{{ forms.checkboxField({
-    label : 'Select All Sections' | t('section-and-product-type'),
-    instructions : 'This will allow all sections to be used for selection.' | t('section-and-product-type'),
-    id : 'selectAll',
-    class: 'selectAll'
-}) }}
+<div id="multiple">
+    {{ forms.checkboxField({
+        label : 'Multiple Select' | t('section-and-product-type'),
+        instructions : 'If checked, the user can select multiple sections, otherwise they can only select one.' | t('section-and-product-type'),
+        name : 'multiple',
+        checked: field.multiple
+    }) }}
+</div>
 
-{{ forms.checkboxGroupField({
-    label : 'Allowed Sections' | t('section-and-product-type'),
-    instructions : 'The sections that may be chosen for this field.' | t('section-and-product-type'),
-    id : 'allowedSections',
-    name : 'allowedSections',
-    values: field.allowedSections,
-    options : sections
-}) }}
+<hr>
 
-{{ forms.checkboxField({
-    label : 'Multiple Select' | t('section-and-product-type'),
-    instructions : 'If checked, the user can select multiple sections, otherwise they can only select one.' | t('section-and-product-type'),
-    id : 'multiple',
-    name : 'multiple',
-    checked: field.multiple
-}) }}
+<div data-ww="selectAll">
+    {{ forms.checkboxField({
+        label : 'Select All Sections' | t('section-and-product-type'),
+        instructions : 'This will allow all sections to be used for selection.' | t('section-and-product-type'),
+        name : 'selectAll',
+        checked: field.selectAll
+    }) }}
+</div>
 
+<hr>
+
+<div id="allowedSections" data-ww="allowedSections">
+    {{ forms.checkboxGroupField({
+        label : 'Allowed Sections' | t('section-and-product-type'),
+        instructions : 'The sections that may be chosen for this field.' | t('section-and-product-type'),
+        name : 'allowedSections',
+        values: field.allowedSections,
+        options : sections
+    }) }}
+</div>
+
+<hr data-ww="excludedSections">
+<div data-ww="excludedSections">
 {{ forms.checkboxGroupField({
     label : 'Exclude Sections' | t('section-and-product-type'),
     instructions : 'The sections that will be excluded from the selection for this field.' | t('section-and-product-type'),
     options : sections,
+    values: field.excludedSections,
     id : 'excludedSections',
+    name : 'excludedSections',
 }) }}
+</div>
