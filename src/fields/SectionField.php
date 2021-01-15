@@ -13,6 +13,11 @@ use craft\base\PreviewableFieldInterface;
 class SectionField extends Field implements PreviewableFieldInterface
 {
     /**
+     * @var bool Contains  values for select all sections.
+     */
+    public $selectAll = false;
+
+    /**
      * @var bool Contains multi-select values for sections.
      */
     public $multiple = false;
@@ -21,6 +26,11 @@ class SectionField extends Field implements PreviewableFieldInterface
      * @var array Sections that are allowed for selection in the field settings.
      */
     public $allowedSections = [];
+
+    /**
+     * @var array Sections that are allowed for selection in the field settings.
+     */
+    public $excludedSections = [];
 
     /**
      * @inheritdoc
@@ -97,6 +107,29 @@ class SectionField extends Field implements PreviewableFieldInterface
     }
 
     /**
+     * Return sections without excluded sections
+     *
+     * @return array
+     */
+    public function getAllowedSections(): array
+    {
+        $sections = $this->getSections();
+        $excludedSections = $this->excludedSections;
+
+        if (!empty($excludedSections)  && !empty($this->selectAll) ) {
+            $excludedSections = array_map(function($value) {
+                return intval($value);
+            }, $excludedSections);
+
+            foreach ($excludedSections as $value) {
+                unset($sections[$value]);
+            }
+        }
+
+        return $sections;
+    }
+
+    /**
      * @inheritdoc
      */
     public function normalizeValue($value, ElementInterface $element = null)
@@ -153,13 +186,17 @@ class SectionField extends Field implements PreviewableFieldInterface
      */
     public function getInputHtml($value, ElementInterface $element = null): string
     {
-        if (empty($this->allowedSections)) return 'You have not selected any section for selection, select in the field settings.';
+        if (empty($this->allowedSections) && empty($this->selectAll)) return 'You have not selected any section for selection, select in the field settings.';
 
         $sections = $this->getSections();
+        if (!empty($this->selectAll)) {
+            $sections = $this->getAllowedSections();
+        }
+
         $allowSections = array_flip($this->allowedSections);
         $allowSections[''] = true;
         if (!$this->multiple && !$this->required) {
-            $sections = array_merge(['' => Craft::t('app', 'None')], $sections);
+            $sections = ['' => Craft::t('app', 'None')] + $sections;
         }
         $allowSections = array_intersect_key($sections, $allowSections);
 
