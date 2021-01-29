@@ -177,6 +177,7 @@ class SectionField extends Field implements PreviewableFieldInterface
             [
                 'field' => $this,
                 'sections' => $this->getSections(),
+                'selectAll' => $this->selectAll,
             ]
         );
     }
@@ -189,11 +190,18 @@ class SectionField extends Field implements PreviewableFieldInterface
         if (empty($this->allowedSections) && empty($this->selectAll)) return 'You have not selected any section for selection, select in the field settings.';
 
         $sections = $this->getSections();
-        if (!empty($this->selectAll)) {
-            $sections = $this->getAllowedSections();
+        $allowSectionsConfig = $this->allowedSections;
+
+        if ($this->selectAll) {
+            if (is_array($this->excludedSections)) {
+                foreach ($this->excludedSections as $sectionId) {
+                    unset($sections[$sectionId]);
+                }
+            }
+            $allowSectionsConfig = array_keys($sections);
         }
 
-        $allowSections = array_flip($this->allowedSections);
+        $allowSections = array_flip($allowSectionsConfig);
         $allowSections[''] = true;
         if (!$this->multiple && !$this->required) {
             $sections = ['' => Craft::t('app', 'None')] + $sections;
