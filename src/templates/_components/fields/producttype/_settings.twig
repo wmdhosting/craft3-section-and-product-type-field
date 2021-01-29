@@ -1,6 +1,6 @@
 {% import '_includes/forms' as forms %}
 
-{% do view.registerAssetBundle("wmd\\sectionandproducttype\\assetbundles\\producttypefield\\ProductTypeFieldAsset") %}
+{% set allowProductTypes = selectAll ? [true] : field.allowProductTypes %}
 
 <div id="multiple">
     {{ forms.checkboxField({
@@ -27,9 +27,9 @@
 <div id="allowProductTypes" data-ww="allowProductTypes">
     {{ forms.checkboxGroupField({
         label : 'Allowed Product Types' | t('section-and-product-type'),
-        instructions : 'The product types that may be chosen for this field.' | t('section-and-product-type'),
+        instructions : 'The product types that may be chosen for this field.\n **If selected Select All Product Types, all sections are selected**.' | t('section-and-product-type'),
         name : 'allowProductTypes',
-        values: field.allowProductTypes,
+        values: allowProductTypes,
         options : productTypes
     }) }}
 </div>
@@ -38,7 +38,7 @@
 
 {{ forms.checkboxGroupField({
     label : 'Exclude Product Types' | t('section-and-product-type'),
-    instructions : 'The product types that will be excluded from the selection for this field.' | t('section-and-product-type'),
+    instructions : 'The product types that will be excluded from the selection for this field.\n **Used when select all is on**.' | t('section-and-product-type'),
     options : productTypes,
     id : 'excluded',
     values: field.excludedProductTypes,
