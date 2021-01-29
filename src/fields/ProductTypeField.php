@@ -193,6 +193,7 @@ class ProductTypeField extends Field implements PreviewableFieldInterface
             [
                 'field' => $this,
                 'productTypes' => $this->getProductTypes(),
+                'selectAll' => $this->selectAll,
             ]
         );
     }
@@ -221,12 +222,18 @@ class ProductTypeField extends Field implements PreviewableFieldInterface
         if (empty($this->allowProductTypes) && empty($this->selectAll)) return 'You have not selected any product types for selection, select in the field settings.';
 
         $productTypes = $this->getProductTypes();
+        $allowProductTypesConfig = $this->allowProductTypes;
 
-        if (!empty($this->selectAll)) {
-            $productTypes = $this->getAllowedProductTypes();
+        if ($this->selectAll) {
+            if (is_array($this->excludedProductTypes)) {
+                foreach ($this->excludedProductTypes as $typeId) {
+                    unset($productTypes[$typeId]);
+                }
+            }
+            $allowProductTypesConfig = array_keys($productTypes);
         }
 
-        $allowProductTypes = array_flip($this->allowProductTypes);
+        $allowProductTypes = array_flip($allowProductTypesConfig);
         $allowProductTypes[''] = true;
         if (!$this->multiple && !$this->required) {
             $productTypes =  ['' => Craft::t('app', 'None')] + $productTypes;
