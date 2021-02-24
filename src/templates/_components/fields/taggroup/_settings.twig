@@ -1,0 +1,40 @@
+{% import '_includes/forms' as forms %}
+
+{% set allowTagGroups = selectAll ? [true] : field.allowedGroups %}
+
+{{ forms.checkboxField({
+    label : 'Multiple Select' | t('section-and-product-type'),
+    instructions : 'If checked, the user can select multiple tag groups, otherwise they can only select one.' | t('section-and-product-type'),
+    name : 'multiple',
+    checked: field.multiple
+}) }}
+
+<hr>
+
+{{ forms.checkboxField({
+    label : 'Select All Tag Groups' | t('section-and-product-type'),
+    instructions : 'This will allow all tag groups to be used for selection.' | t('section-and-product-type'),
+    name : 'selectAll',
+    checked: field.selectAll
+}) }}
+
+<hr>
+
+{{ forms.checkboxGroupField({
+    label : 'Allowed Tag Groups' | t('section-and-product-type'),
+    instructions : 'The groups that may be chosen for this field.\n **If selected Select All Tag Groups, all sections are selected**.' | t('section-and-product-type'),
+    name : 'allowedGroups',
+    values: allowTagGroups,
+    options : groups
+}) }}
+
+<hr>
+
+{{ forms.checkboxGroupField({
+    label : 'Exclude Groups' | t('section-and-product-type'),
+    instructions : 'The groups that will be excluded from the selection for this field.\n **Used when select all is on**.' | t('section-and-product-type'),
+    options : groups,
+    values: field.excludedGroups,
+    id : 'excludedGroups',
+    name : 'excludedGroups',
+}) }}
