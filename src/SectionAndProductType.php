@@ -9,7 +9,8 @@ use craft\services\Fields;
 use craft\services\Plugins;
 use craft\events\PluginEvent;
 use craft\events\RegisterComponentTypesEvent;
-use wmd\sectionandproducttype\fields\SectionField ;
+use wmd\sectionandproducttype\fields\SectionField;
+use wmd\sectionandproducttype\fields\TagGroupField;
 use wmd\sectionandproducttype\fields\ProductTypeField;
 
 
@@ -49,6 +50,7 @@ class SectionAndProductType extends Plugin
             function (RegisterComponentTypesEvent $event) {
                 $event->types[] = SectionField::class;
                 $event->types[] = ProductTypeField::class;
+                $event->types[] = TagGroupField::class;
             }
         );
 
