@@ -15,22 +15,22 @@ class TagGroupField extends Field implements PreviewableFieldInterface
     /**
      * @var bool Contains  values for select all groups.
      */
-    public $selectAll = false;
+    public bool $selectAll = false;
 
     /**
      * @var bool Contains multi-select values for groups.
      */
-    public $multiple = false;
+    public bool $multiple = false;
 
     /**
      * @var array Sections that are allowed for selection in the field settings.
      */
-    public $allowedGroups = [];
+    public array $allowedGroups = [];
 
     /**
      * @var array Sections that are allowed for selection in the field settings.
      */
-    public $excludedGroups = [];
+    public array $excludedGroups = [];
 
     /**
      * @inheritdoc
@@ -43,7 +43,7 @@ class TagGroupField extends Field implements PreviewableFieldInterface
     /**
      * @inheritdoc
      */
-    public function rules()
+    public function rules(): array
     {
         $rules = parent::rules();
         $rules[] = [
@@ -133,7 +133,7 @@ class TagGroupField extends Field implements PreviewableFieldInterface
     /**
      * @inheritdoc
      */
-    public function normalizeValue($value, ElementInterface $element = null)
+    public function normalizeValue($value, ?ElementInterface $element = null): Mixed
     {
         if (is_string($value)) {
             $value = Json::decodeIfJson($value);
@@ -157,7 +157,7 @@ class TagGroupField extends Field implements PreviewableFieldInterface
     /**
      * @inheritdoc
      */
-    public function serializeValue($value, ElementInterface $element = null)
+    public function serializeValue($value, ?ElementInterface $element = null): Mixed
     {
         if (is_array($value)) {
             foreach ($value as $key => $id) {
@@ -171,7 +171,7 @@ class TagGroupField extends Field implements PreviewableFieldInterface
     /**
      * @inheritdoc
      */
-    public function getSettingsHtml()
+    public function getSettingsHtml(): ?string
     {
 
         return Craft::$app->getView()->renderTemplate(

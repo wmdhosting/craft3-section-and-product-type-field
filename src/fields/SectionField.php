@@ -15,22 +15,22 @@ class SectionField extends Field implements PreviewableFieldInterface
     /**
      * @var bool Contains  values for select all sections.
      */
-    public $selectAll = false;
+    public bool $selectAll = false;
 
     /**
      * @var bool Contains multi-select values for sections.
      */
-    public $multiple = false;
+    public bool $multiple = false;
 
     /**
      * @var array Sections that are allowed for selection in the field settings.
      */
-    public $allowedSections = [];
+    public array $allowedSections = [];
 
     /**
      * @var array Sections that are allowed for selection in the field settings.
      */
-    public $excludedSections = [];
+    public array $excludedSections = [];
 
     /**
      * @inheritdoc
@@ -43,7 +43,7 @@ class SectionField extends Field implements PreviewableFieldInterface
     /**
      * @inheritdoc
      */
-    public function rules()
+    public function rules(): array
     {
         $rules = parent::rules();
         $rules[] = [
@@ -132,7 +132,7 @@ class SectionField extends Field implements PreviewableFieldInterface
     /**
      * @inheritdoc
      */
-    public function normalizeValue($value, ElementInterface $element = null)
+    public function normalizeValue($value, ?ElementInterface $element = null): Mixed
     {
         if (is_string($value)) {
             $value = Json::decodeIfJson($value);
@@ -156,7 +156,7 @@ class SectionField extends Field implements PreviewableFieldInterface
     /**
      * @inheritdoc
      */
-    public function serializeValue($value, ElementInterface $element = null)
+    public function serializeValue($value, ?ElementInterface $element = null): Mixed
     {
         if (is_array($value)) {
             foreach ($value as $key => $id) {
@@ -170,7 +170,7 @@ class SectionField extends Field implements PreviewableFieldInterface
     /**
      * @inheritdoc
      */
-    public function getSettingsHtml()
+    public function getSettingsHtml(): ?string
     {
         return Craft::$app->getView()->renderTemplate(
             'section-and-product-type/_components/fields/section/_settings',
