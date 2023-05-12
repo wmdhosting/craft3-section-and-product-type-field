@@ -33,6 +33,11 @@ class SectionField extends Field implements PreviewableFieldInterface
     public array $excludedSections = [];
 
     /**
+     * @var string Part of handle for selected section by this part
+     */
+    public string $partOfHandle = '';
+    
+    /**
      * @inheritdoc
      */
     public static function displayName(): string
@@ -84,6 +89,25 @@ class SectionField extends Field implements PreviewableFieldInterface
         if (!empty($editableSections)) {
             foreach ($editableSections as $section) {
                 $sections[$section->id] = Craft::t('site', $section->name);
+            }
+        }
+
+        return $sections;
+    }
+    
+    /**
+     * Return all sections handles.
+     *
+     * @return array
+     */
+    private function getSectionsHandles()
+    {
+        $sections = [];
+        $editableSections = Craft::$app->getSections()->getEditableSections();
+
+        if (!empty($editableSections)) {
+            foreach ($editableSections as $section) {
+                $sections[$section->id] = $section->handle;
             }
         }
 
@@ -178,6 +202,7 @@ class SectionField extends Field implements PreviewableFieldInterface
                 'field' => $this,
                 'sections' => $this->getSections(),
                 'selectAll' => $this->selectAll,
+                'partOfHandle' => $this->partOfHandle,
             ]
         );
     }
@@ -187,7 +212,9 @@ class SectionField extends Field implements PreviewableFieldInterface
      */
     public function getInputHtml($value, ElementInterface $element = null): string
     {
-        if (empty($this->allowedSections) && empty($this->selectAll)) return 'You have not selected any section for selection, select in the field settings.';
+        if (empty($this->allowedSections) && empty($this->selectAll) && empty($this->partOfHandle)) {
+            return 'You have not selected any section for selection, select in the field settings.';
+        }
 
         $sections = $this->getSections();
         $allowSectionsConfig = $this->allowedSections;
@@ -199,6 +226,14 @@ class SectionField extends Field implements PreviewableFieldInterface
                 }
             }
             $allowSectionsConfig = array_keys($sections);
+        } else if(!empty($this->partOfHandle)) {
+            foreach ($this->getSectionsHandles() as $id => $handle) {
+                if (stripos($handle, $this->partOfHandle) !== false
+                    && !in_array($id, $allowSectionsConfig)
+                    && !in_array($id, $this->excludedSections)) {
+                    $allowSectionsConfig[] = $id;
+                }
+            }
         }
 
         $allowSections = array_flip($allowSectionsConfig);
