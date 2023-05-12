@@ -24,7 +24,7 @@ class SectionAndProductType extends Plugin
     /**
      * @var string
      */
-    public string $schemaVersion = '2.0.2';
+    public string $schemaVersion = '2.0.3';
 
     /**
      * @var bool
