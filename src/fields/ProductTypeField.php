@@ -45,14 +45,6 @@ class ProductTypeField extends Field implements PreviewableFieldInterface
     /**
      * @inheritdoc
      */
-    public static function hasContentColumn(): bool
-    {
-        return true;
-    }
-
-    /**
-     * @inheritdoc
-     */
     public function rules(): array
     {
         $rules = parent::rules();
@@ -80,7 +72,7 @@ class ProductTypeField extends Field implements PreviewableFieldInterface
     /**
      * @inheritdoc
      */
-    public function getContentColumnType(): string
+    public static function dbType(): string
     {
         return Schema::TYPE_STRING;
     }
