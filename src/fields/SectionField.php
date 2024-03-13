@@ -84,7 +84,7 @@ class SectionField extends Field implements PreviewableFieldInterface
     private function getSections()
     {
         $sections = [];
-        $editableSections = Craft::$app->getSections()->getEditableSections();
+        $editableSections = Craft::$app->getEntries()->getAllSections();
 
         if (!empty($editableSections)) {
             foreach ($editableSections as $section) {
@@ -117,15 +117,7 @@ class SectionField extends Field implements PreviewableFieldInterface
     /**
      * @inheritdoc
      */
-    public static function hasContentColumn(): bool
-    {
-        return true;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getContentColumnType(): string
+    public function dbType(): string
     {
         return Schema::TYPE_STRING;
     }
