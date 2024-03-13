@@ -117,7 +117,7 @@ class SectionField extends Field implements PreviewableFieldInterface
     /**
      * @inheritdoc
      */
-    public function dbType(): string
+    public static function dbType(): string
     {
         return Schema::TYPE_STRING;
     }
