@@ -2,7 +2,7 @@
     "name": "wmd/section-and-product-type",
     "description": "If you buidling some Page content builder this can very usefull field type",
     "type": "craft-plugin",
-    "version": "2.0.5",
+    "version": "2.0.6",
     "keywords": [
         "craft",
         "cms",
