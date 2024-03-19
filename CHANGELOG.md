@@ -13,3 +13,6 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ## 1.0.2 - 2020-12-21
 ### Added
 - Update logic
+## 1.0.2 - 2023-03-19
+### Added
+- Update to Craft CMS 5
